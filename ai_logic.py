@@ -38,27 +38,3 @@ def move_relative_to_mouse(screen_mate, chase=True):
 
     screen_mate.setMovie(screen_mate.movie)
     screen_mate.start_moving()
-
-
-# def choose_action(screen_mate):
-#     action = random.choice(['stand', 'move_r', 'move_l', 'move_u', 'move_d'])
-#     print(f"Action chosen: {action}")  # Отладочное сообщение
-
-#     if action == 'move_r':
-#         screen_mate.movie = screen_mate.mRight
-#         screen_mate.setMovie(screen_mate.movie)
-#         screen_mate.start_moving()
-#     elif action == 'move_l':
-#         screen_mate.movie = screen_mate.mLeft
-#         screen_mate.setMovie(screen_mate.movie)
-#         screen_mate.start_moving()
-#     elif action == 'move_u':
-#         screen_mate.movie = screen_mate.mUp
-#         screen_mate.setMovie(screen_mate.movie)
-#         screen_mate.start_moving()
-#     elif action == 'move_d':
-#         screen_mate.movie = screen_mate.mDown
-#         screen_mate.setMovie(screen_mate.movie)
-#         screen_mate.start_moving()
-#     else:
-#         screen_mate.stop_moving()

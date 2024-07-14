@@ -13,7 +13,7 @@ class ScreenMate(QLabel):
         self.setStyleSheet("background:transparent;")
 
         # Загрузка статичного изображения
-        self.static_pixmap = QPixmap("100.png")
+        self.static_pixmap = QPixmap("character/100.png")
         if self.static_pixmap.isNull():
             print("Ошибка: не удалось загрузить изображение")
         else:

@@ -1,19 +1,19 @@
-# animated_screenmate.py
 from PyQt5.QtCore import QTimer, QPoint, Qt
 from PyQt5.QtGui import QMovie, QPixmap
 from PyQt5.QtWidgets import QLabel
 from screenmate import ScreenMate
 from ai_logic import choose_action, move_relative_to_mouse
 
+
 class AnimatedScreenMate(ScreenMate):
     def __init__(self):
         super().__init__()
 
         # Загрузка GIF-анимации
-        self.mRight = QMovie("100_r.gif")
-        self.mLeft = QMovie("100_l.gif")
-        self.mUp = QMovie("100_r.gif")
-        self.mDown = QMovie("100_l.gif")
+        self.mRight = QMovie("character/100_r.gif")
+        self.mLeft = QMovie("character/100_l.gif")
+        self.mUp = QMovie("character/100_r.gif")
+        self.mDown = QMovie("character/100_l.gif")
 
         # Начальная анимация (можно выбрать любую)
         self.movie = self.mRight
