@@ -4,35 +4,19 @@ import vosk
 import json
 from . import words
 from .skills import *
+from .voice import speaker
 from sklearn.feature_extraction.text import CountVectorizer  
 from sklearn.linear_model import LogisticRegression
 
 q = queue.Queue()
-
 model = vosk.Model('voice_assistant/model-small')
-
 device = sd.default.device 
 samplerate = int(sd.query_devices(device[0], 'input')['default_samplerate'])
 
 def callback(indata, frames, time, status):
     q.put(bytes(indata))
 
-
-def recognize(data, vectorizer, clf):
-    trg = words.TRIGGERS.intersection(data.split())
-    if not trg:
-        return
-
-    data.replace(list(trg)[0], '')
-
-    text_vector = vectorizer.transform([data]).toarray()[0]
-    answer = clf.predict([text_vector])[0]
-    print(answer)
-    func_name = answer.split()[0]
-    voice.speaker(answer.replace(func_name, ''))
-    exec(func_name + '()')
-
-def main():
+def recognize(screen_mate=None):
     vectorizer = CountVectorizer()
     vectors = vectorizer.fit_transform(list(words.data_set.keys()))
     
@@ -41,15 +25,23 @@ def main():
 
     del words.data_set
 
-    with sd.RawInputStream(samplerate=samplerate, blocksize = 16000, device=device[0], dtype='int16',
-                                channels=1, callback=callback):
-
+    with sd.RawInputStream(samplerate=samplerate, blocksize=16000, device=device[0], dtype='int16',
+                           channels=1, callback=callback):
         rec = vosk.KaldiRecognizer(model, samplerate)
         while True:
             data = q.get()
             if rec.AcceptWaveform(data):
                 data = json.loads(rec.Result())['text']
-                recognize(data, vectorizer, clf)
+                trg = words.TRIGGERS.intersection(data.split())
+                if not trg:
+                    continue
+
+                data = data.replace(list(trg)[0], '')
+                text_vector = vectorizer.transform([data]).toarray()[0]
+                answer = clf.predict([text_vector])[0]
+                print(answer)
+                func_name = answer.split()[0]
+                speaker(answer.replace(func_name, ''))
+                exec(func_name + '()')
             else:
                 print(rec.PartialResult())
-

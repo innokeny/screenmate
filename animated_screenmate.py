@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QLabel
 from screenmate import ScreenMate
 from ai_logic import choose_action, move_relative_to_mouse
 
-
 class AnimatedScreenMate(ScreenMate):
     def __init__(self):
         super().__init__()
@@ -13,16 +12,15 @@ class AnimatedScreenMate(ScreenMate):
         self.mRight = QMovie("character/100_r.gif")
         self.mLeft = QMovie("character/100_l.gif")
         self.mUp = QMovie("character/100_r.gif")
-        self.mDown = QMovie("character/100_l.gif")
+        self.mDown = QMovie("character/100_r.gif")
 
-        # Начальная анимация (можно выбрать любую)
         self.movie = self.mRight
         self.mode = 'stand'
 
         # Создание таймера для выбора действия ИИ
         self.action_timer = QTimer(self)
         self.action_timer.timeout.connect(lambda: choose_action(self))
-        self.action_timer.start(2000)  # Интервал в миллисекундах для выбора действия
+        self.action_timer.start(2000)
 
         # Создание таймера для анимации движения
         self.move_timer = QTimer(self)
@@ -31,11 +29,11 @@ class AnimatedScreenMate(ScreenMate):
         # Таймер для отслеживания курсора мыши
         self.mouse_timer = QTimer(self)
         self.mouse_timer.timeout.connect(self.update_mode)
-        self.mouse_timer.start(100)  # Интервал в миллисекундах для отслеживания курсора
+        self.mouse_timer.start(100)
 
     def start_moving(self):
         self.movie.start()
-        self.move_timer.start(100)  # Интервал в миллисекундах для анимации
+        self.move_timer.start(100)
         print(f"Начало движения в направлении: {self.get_direction()}")
 
     def stop_moving(self):
@@ -45,7 +43,6 @@ class AnimatedScreenMate(ScreenMate):
         print("Остановка движения")
 
     def animate(self):
-        # Пример простой анимации: перемещение скринмейта в зависимости от установленной анимации
         current_pos = self.pos()
         if self.movie == self.mRight:
             new_pos = QPoint(current_pos.x() + 10, current_pos.y())
@@ -57,7 +54,7 @@ class AnimatedScreenMate(ScreenMate):
             new_pos = QPoint(current_pos.x(), current_pos.y() + 10)
 
         self.move(self.get_clamped_position(new_pos))
-        print(f"Moved to: {new_pos}")  # Отладочное сообщение
+        print(f"Moved to: {new_pos}")
 
     def get_direction(self):
         if self.movie == self.mRight:
@@ -76,11 +73,3 @@ class AnimatedScreenMate(ScreenMate):
             move_relative_to_mouse(self, chase=False)
         elif self.mode == 'chase':
             move_relative_to_mouse(self, chase=True)
-
-
-
-
-        # self.mRight = QMovie("100_r.gif")
-        # self.mLeft = QMovie("100_l.gif")
-        # self.mUp = QMovie("100_r.gif")
-        # self.mDown = QMovie("100_l.gif")
