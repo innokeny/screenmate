@@ -9,12 +9,14 @@ class AnimatedScreenMate(ScreenMate):
         super().__init__()
 
         # Загрузка GIF-анимации
-        self.mRight = QMovie("character/100_r.gif")
-        self.mLeft = QMovie("character/100_l.gif")
-        self.mUp = QMovie("character/100_r.gif")
-        self.mDown = QMovie("character/100_r.gif")
+        self.mRight = QMovie("character/100h_r.gif")
+        self.mLeft = QMovie("character/100h_l.gif")
+        self.mUp = QMovie("character/100h_u.gif")
+        self.mDown = QMovie("character/100h_d.gif")
+        self.mStand = QMovie("character/100h_afk.gif")
+        self.mTalk = QMovie("character/100h_talk.gif")
 
-        self.movie = self.mRight
+        self.movie = self.mStand
         self.mode = 'stand'
 
         # Создание таймера для выбора действия ИИ
@@ -31,6 +33,27 @@ class AnimatedScreenMate(ScreenMate):
         self.mouse_timer.timeout.connect(self.update_mode)
         self.mouse_timer.start(100)
 
+        # Установка первоначального изображения
+        self.setMovie(self.mStand)
+        self.movie.start()
+
+    def set_talking_mode(self, talking):
+        if talking:
+            self.set_mode('talk')
+        else:
+            self.set_mode('stand')
+
+    def set_mode(self, mode):
+        self.mode = mode
+        if self.mode == 'talk':
+            self.action_timer.stop()
+            self.movie = self.mTalk
+        elif self.mode == 'stand':
+            self.movie = self.mStand
+            self.action_timer.start(2000)
+        self.setMovie(self.movie)
+        self.movie.start()
+
     def start_moving(self):
         self.movie.start()
         self.move_timer.start(100)
@@ -39,7 +62,8 @@ class AnimatedScreenMate(ScreenMate):
     def stop_moving(self):
         self.move_timer.stop()
         self.movie.stop()
-        self.setPixmap(self.static_pixmap)
+        self.setMovie(self.mStand)
+        self.movie.start()
         print("Остановка движения")
 
     def animate(self):
@@ -52,6 +76,8 @@ class AnimatedScreenMate(ScreenMate):
             new_pos = QPoint(current_pos.x(), current_pos.y() - 10)
         elif self.movie == self.mDown:
             new_pos = QPoint(current_pos.x(), current_pos.y() + 10)
+        else:
+            new_pos = current_pos  # Если анимация не двигается, остаемся на текущей позиции
 
         self.move(self.get_clamped_position(new_pos))
         print(f"Moved to: {new_pos}")

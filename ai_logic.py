@@ -9,7 +9,7 @@ def choose_action(screen_mate):
     elif action == 'chase':
         screen_mate.mode = 'chase'
     else:
-        screen_mate.stop_moving()
+        screen_mate.mode = 'stand'
 
 def move_relative_to_mouse(screen_mate, chase=True):
     mouse_pos = screen_mate.cursor().pos()

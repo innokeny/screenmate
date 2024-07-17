@@ -12,14 +12,6 @@ class ScreenMate(QLabel):
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setStyleSheet("background:transparent;")
 
-        # Загрузка статичного изображения
-        self.static_pixmap = QPixmap("character/100.png")
-        if self.static_pixmap.isNull():
-            print("Ошибка: не удалось загрузить изображение")
-        else:
-            self.setPixmap(self.static_pixmap)
-            print("Статичное изображение успешно загружено")
-
         # Перемещение скринмейта по экрану
         self.drag_position = None
         self.setMouseTracking(True)
